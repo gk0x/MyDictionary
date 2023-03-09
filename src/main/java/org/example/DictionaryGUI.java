@@ -12,8 +12,8 @@ import java.util.*;
 
 public class DictionaryGUI extends JFrame implements ActionListener {
     private static final long serialVersionUID = 1L;
-    private Map<String, String> dictionary;
-    private JTextArea textArea;
+    private final Map<String, String> dictionary;
+    private final JTextArea textArea;
 
     public DictionaryGUI() {
 
