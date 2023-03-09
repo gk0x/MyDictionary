@@ -35,12 +35,16 @@ public class DictionaryGUI extends JFrame implements ActionListener {
         dictionary = loadDictionary();
 
         textArea = new JTextArea();
+        textArea.setBackground(Color.lightGray);
         textArea.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(textArea);
         add(scrollPane, BorderLayout.CENTER);
 
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(1, 3));
+        buttonPanel.setLayout(new GridLayout(1, 6));
+
+        JPanel buttonPanel2 = new JPanel();
+        buttonPanel2.setLayout(new BorderLayout());
 
         JButton addButton = new JButton("Dodaj słowo");
         addButton.addActionListener(this);
@@ -66,7 +70,15 @@ public class DictionaryGUI extends JFrame implements ActionListener {
         deleteByNumberButton.addActionListener(this);
         buttonPanel.add(deleteByNumberButton);
 
-        add(buttonPanel, BorderLayout.SOUTH);
+        add(buttonPanel, BorderLayout.NORTH);
+
+        JButton testButton = new JButton("TEST");
+        testButton.addActionListener(this);
+        buttonPanel2.add(testButton);
+
+        add(buttonPanel2,BorderLayout.SOUTH);
+
+
     }
 
     private Map<String, String> loadDictionary() {
@@ -182,6 +194,36 @@ public class DictionaryGUI extends JFrame implements ActionListener {
             textArea.setText(sb.toString());
         }
     }
+    private void testWords() {
+        Set<String> words = dictionary.keySet(); // pobieramy zbiór kluczy słownika
+        List<String> randomWords = new ArrayList<>(4);
+        Random random = new Random();
+
+        // wybieramy 4 losowe słowa z słownika
+        for (int i = 0; i < 4; i++) {
+            int index = random.nextInt(words.size()); // losujemy indeks słowa
+            String word = (String) words.toArray()[index]; // pobieramy słowo z indeksem
+            randomWords.add(word);
+        }
+
+        // pobieramy tłumaczenia wylosowanych słów i wyświetlamy je użytkownikowi
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 4; i++) {
+            String word = randomWords.get(i);
+            String translation = dictionary.get(word);
+            sb.append(i+1).append(". ").append(word).append(": ").append("\n");
+        }
+        sb.append("\nPodaj tłumaczenia słów:\n");
+
+        // pobieramy tłumaczenia od użytkownika i wyświetlamy je razem z oryginalnymi słowami
+        for (int i = 0; i < 4; i++) {
+            String word = randomWords.get(i);
+            String translation = dictionary.get(word);
+            String userTranslation = JOptionPane.showInputDialog(this, sb.toString());
+            sb.append(i+1).append(". ").append(word).append(": ").append(translation).append(" (Twoja odpowiedź: ").append(userTranslation).append(")").append("\n");
+        }
+        textArea.setText(sb.toString());
+    }
 
     public void actionPerformed(ActionEvent e) {
         String actionCommand = e.getActionCommand();
@@ -204,6 +246,9 @@ public class DictionaryGUI extends JFrame implements ActionListener {
                 break;
             case "Usuń po numerze":
                 removeWordByNumber();
+                break;
+            case "TEST":
+                testWords();
                 break;
             default:
                 break;
